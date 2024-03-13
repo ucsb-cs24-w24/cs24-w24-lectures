@@ -75,14 +75,61 @@ public:
 
     }
     
+    TreeNode* LCA(TreeNode* root, TreeNode* p, TreeNode* q, int& num_found) {
+        if(!root) return nullptr;
+        int num_left = 0, num_right = 0;
+        TreeNode* left_lca, * right_lca;
+        if(root->left) left_lca = LCA(root->left, p, q, num_left);
+        num_found+=num_left;
+        if(num_left == 2) return left_lca;
+
+        if(root->right) right_lca = LCA(root->right, p, q, num_right);
+        num_found+=num_right;
+        if(num_right == 2) return right_lca;
+        if(root->val == p->val || root->val == q->val){
+            num_found++;
+            if(num_left == 1 || num_right == 1) return root;
+        }
+
+        return root;
+        
+    }
     
     TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        return root;  
+        int num_found = 0;
+        return LCA(root, p, q, num_found);
+        
+    }
+    
+
+    TreeNode* lowestCommonAncestor_0(TreeNode* root, TreeNode* p, TreeNode* q) {
+        vector<TreeNode*> path_p, path_q;
+        bool found = false;
+        DFS_FindPath(root, p, found, path_p);
+        found = false;
+        DFS_FindPath(root, q, found, path_q);
+        TreeNode* result = path_p[0];
+        int i = 1;
+        while(i < min(path_p.size(), path_q.size())){
+            if(path_p[i] == path_q[i]){
+                result = path_p[i];
+            }
+            i++;
+        }
+        return result;
     }
 
-
-
     void DFS_FindPath(TreeNode* r, TreeNode* p, bool& found, vector<TreeNode*>& path){
+        if(!r) return;
+        path.push_back(r);
+        if(r->val == p->val) {
+            found = true;
+            return;
+        }
+        //cout << r->val << " ";
+        if(r->left && !found ) DFS_FindPath(r->left, p, found, path);
+        if(r->right && !found ) DFS_FindPath(r->right, p, found, path);
+        if(!found) path.pop_back();
 
     }
 
@@ -111,22 +158,22 @@ int main(int argc, char const *argv[])
         cout << e->val << " ";
     }
     cout << endl;
-    // TreeNode* root = t1;
+    TreeNode* root = t1;
 
-    // TreeNode* result = ss.lowestCommonAncestor(root, root,root->left);
-    // assert(result->val == 1);
-    // cout << "PASSED TEST 0" << endl;
+    TreeNode* result = ss.lowestCommonAncestor(root, root,root->left);
+    assert(result->val == 1);
+    cout << "PASSED TEST 0" << endl;
 
-    // root = t2;
-    // result =  ss.lowestCommonAncestor(root, root->left,root->right);
-    // assert(result->val == 3);
-    // cout << "PASSED TEST 1" << endl;
-    // result = ss.lowestCommonAncestor(root, root->left,root->left->right->right);
-    // assert(result->val == 5);
-    // cout << "PASSED TEST 2" << endl;
-    // result = ss.lowestCommonAncestor(root, root->left->left,root->left->right->right);
-    // assert(result->val == 5);
-    // cout << "PASSED TEST 3" << endl;
+    root = t2;
+    result =  ss.lowestCommonAncestor(root, root->left,root->right);
+    assert(result->val == 3);
+    cout << "PASSED TEST 1" << endl;
+    result = ss.lowestCommonAncestor(root, root->left,root->left->right->right);
+    assert(result->val == 5);
+    cout << "PASSED TEST 2" << endl;
+    result = ss.lowestCommonAncestor(root, root->left->left,root->left->right->right);
+    assert(result->val == 5);
+    cout << "PASSED TEST 3" << endl;
 
     return 0;
 }
