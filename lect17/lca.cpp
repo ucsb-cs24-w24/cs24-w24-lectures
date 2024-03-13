@@ -25,11 +25,6 @@ struct TreeNode {
 
 class Solution {
 public:
-    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
-        return root;  
-    }
-
-
 
     void preorder(TreeNode *r){
         if(!r) return;
@@ -79,6 +74,13 @@ public:
         cout << endl;
 
     }
+    
+    
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        return root;  
+    }
+
+
 
     void DFS_FindPath(TreeNode* r, TreeNode* p, bool& found, vector<TreeNode*>& path){
 
