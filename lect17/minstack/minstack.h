@@ -8,24 +8,25 @@ using namespace std;
 template <class T>
 class minStack{
     public:
-        void push(T value){ 
- 
+        void push(T value){ //O(1)
+            if(empty() || value < min()) mystack_.push_front(make_pair(value, value));
+            else mystack_.push_front(make_pair(value, min()));
         }
 
-        void pop(){ 
+        void pop(){ //O(1)
             mystack_.pop_front();
         }
 
-        T top(){ 
+        T top(){ //O(1)
             return mystack_.front().first;
         }
 
-        bool empty(){ 
+        bool empty(){ //O(1)
             return mystack_.empty();
         }
 
-        T min(){ 
-            return 42;
+        T min(){ //O(1)
+            return mystack_.front().second;
         }
 
     private:
