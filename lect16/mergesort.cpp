@@ -2,9 +2,44 @@
 #include <iostream>
 #include <assert.h>
 using namespace std;
+
+void merge(vector<int>&v, vector<int>& left, vector<int>& right){
+    int i  = 0;
+    int j  = 0;
+    int k  = 0;
+    while(i < left.size()  && j < right.size()){
+        if(left[i] < right[j]){
+            v[k] = left[i];
+            i++;
+            k++;
+        }else{
+            v[k] = right[j];
+            j++;
+            k++;
+        }
+    }
+    while(i < left.size()){
+        v[k] = left[i];
+        i++;
+        k++;
+    }
+    while(j < right.size()){
+        v[k] = right[j];
+        j++;
+        k++;
+        
+    }
+
+}
   
 void mergeSort(vector<int>& v){
-
+    if(v.size() <= 1 ) return;
+    int mid = (v.size() - 1) /2 ;
+    vector<int> left(v.begin(), v.begin() + mid + 1);
+    vector<int> right(v.begin()+ mid + 1, v.end());
+    mergeSort(left);
+    mergeSort(right);
+    merge(v, left, right);
 }
 
 
